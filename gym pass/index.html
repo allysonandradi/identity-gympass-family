@@ -1,0 +1,3532 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="WellHub — Tu bienestar en un solo lugar.">
+  <meta name="theme-color" content="#E8566D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>WellHub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;451;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "MinhaFonte";
+      src: url("fonts/minha-fonte-NaNHolo-Bold.otf") format("opentype");
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    /* ======= RESET ======= */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    html {
+      height: 100%;
+      -webkit-text-size-adjust: 100%
+    }
+
+    body {
+      height: 100%;
+      font-family: "Inter", sans-serif;
+      background: #f0f0f0;
+      color: #1a1a1a;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      overflow-y: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      font: inherit
+    }
+
+    input {
+      font: inherit
+    }
+
+    /* ======= APP CONTAINER ======= */
+    .app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    @media(min-width:431px) {
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px 0
+      }
+
+      .app {
+        height: calc(100vh - 32px);
+        border-radius: 28px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, .1), 0 0 0 1px rgba(0, 0, 0, .03)
+      }
+    }
+
+    /* ======= SCREEN SYSTEM ======= */
+    .screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      opacity: 0;
+      transition: opacity .25s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+
+    .screen.active {
+      display: flex;
+      opacity: 1
+    }
+
+    .screen.fade-in {
+      opacity: 1
+    }
+
+    .screen.fade-out {
+      opacity: 0
+    }
+
+    /* ===================================
+       WELCOME SCREEN (Epilogue font)
+       =================================== */
+
+    .welcome {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #E8566D 0%, #d94060 100%);
+      position: relative;
+      overflow: hidden;
+      height: 100%;
+      font-family: "Epilogue", sans-serif;
+    }
+
+    .welcome__top {
+      padding: max(16px, env(safe-area-inset-top, 16px)) 24px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .welcome__logo {
+      height: 150px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
+
+    .welcome__body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 24px 32px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .welcome__title {
+      font-family: "MinhaFonte", sans-serif;
+      font-size: clamp(3.2rem, 15vw, 2.8rem);
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.10;
+      letter-spacing: -0.05em;
+    }
+
+    .welcome__bottom {
+      position: relative;
+      z-index: 2;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      padding: 28px 24px;
+      padding-bottom: max(28px, env(safe-area-inset-bottom, 28px));
+    }
+
+    .welcome__or {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 14px 0;
+      font-size: .82rem;
+      color: #bbb;
+    }
+
+    .welcome__or::before,
+    .welcome__or::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e5e5e5;
+    }
+
+    /* ======= SHARED BUTTONS ======= */
+    .btn-pink {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 52px;
+      background: #E8566D;
+      color: #fff;
+      font-family: "Inter", sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      border-radius: 100px;
+      border: none;
+      transition: opacity .15s, background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-pink:active {
+      opacity: .8
+    }
+
+    .btn-pink:disabled {
+      background: #e8d0d5;
+      color: #c4a0aa;
+      cursor: not-allowed;
+      opacity: 1
+    }
+
+    .btn-white {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 52px;
+      background: #fff;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      border-radius: 100px;
+      border: 1.5px solid #1a1a1a;
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-white:active {
+      background: #f5f5f5
+    }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 2.5px solid rgba(255, 255, 255, .3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* ===================================
+       AUTH SCREENS (Email & Password)
+       =================================== */
+    .auth {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #FAF8F5;
+      height: 100%;
+      overflow: hidden;
+      font-family: "Inter", sans-serif;
+    }
+
+    /* Close button top-right */
+    .auth__close {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top, 14px));
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      color: #E8566D;
+      cursor: pointer;
+      border-radius: 50%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .auth__close:active {
+      background: rgba(0, 0, 0, .04)
+    }
+
+    .auth__header {
+      padding: max(52px, env(safe-area-inset-top, 52px)) 24px 0;
+      position: relative;
+    }
+
+    .auth__logo {
+      height: 100px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .auth__content {
+      flex: 1;
+      padding: 36px 24px 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .auth__title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+    }
+
+    .auth__subtitle {
+      font-size: .9rem;
+      color: #777;
+      margin-bottom: 32px;
+      line-height: 1.45;
+      font-family: "Inter", sans-serif;
+    }
+
+    .auth__email-display {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .auth__email-text {
+      font-size: .92rem;
+      color: #555;
+    }
+
+    .auth__edit-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #E8566D;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .auth__edit-btn:hover {
+      background: rgba(232, 86, 109, .08)
+    }
+
+    /* Floating label input */
+    .float-group {
+      position: relative;
+      margin-bottom: 24px
+    }
+
+    .float-input {
+      width: 100%;
+      height: 56px;
+      padding: 22px 16px 8px;
+      background: #fff;
+      border: 1.5px solid #d4d0cc;
+      border-radius: 12px;
+      font-size: .95rem;
+      font-family: "Inter", sans-serif;
+      color: #1a1a1a;
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
+      outline: none;
+    }
+
+    .float-input:focus {
+      border-color: #E8566D;
+      box-shadow: 0 0 0 3px rgba(232, 86, 109, .08)
+    }
+
+    .float-input.has-error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, .08)
+    }
+
+    .float-label {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: .95rem;
+      font-family: "Inter", sans-serif;
+      color: #999;
+      pointer-events: none;
+      transition: all .2s cubic-bezier(.22, 1, .36, 1);
+      background: #fff;
+      padding: 0 4px;
+    }
+
+    .float-input:focus~.float-label,
+    .float-input.filled~.float-label {
+      top: 12px;
+      transform: translateY(-50%);
+      font-size: .72rem;
+      color: #777;
+    }
+
+    .float-input:focus~.float-label {
+      color: #E8566D
+    }
+
+    .float-input.has-error~.float-label {
+      color: #ef4444
+    }
+
+    .float-error {
+      font-size: .76rem;
+      color: #ef4444;
+      margin-top: 5px;
+      display: none
+    }
+
+    .float-error.show {
+      display: block
+    }
+
+    /* Password toggle */
+    .pwd-wrap {
+      position: relative
+    }
+
+    .pwd-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .pwd-toggle:hover {
+      background: rgba(0, 0, 0, .04)
+    }
+
+    .pwd-wrap .float-input {
+      padding-right: 52px
+    }
+
+    .auth__forgot {
+      display: inline-block;
+      font-size: .88rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-top: 4px;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .auth__forgot:hover {
+      color: #E8566D
+    }
+
+    .auth__signup-link {
+      display: block;
+      text-align: center;
+      font-size: .92rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      margin-top: 14px;
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .auth__signup-link:hover {
+      color: #E8566D
+    }
+
+    /* ======= AUTH FOOTER — reCAPTCHA ======= */
+    .auth__footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 14px 24px max(14px, env(safe-area-inset-bottom, 14px));
+      border-top: 1px solid #ebe7e3;
+      gap: 16px;
+      flex-shrink: 0;
+      background: #FAF8F5;
+    }
+
+    .auth__footer-text {
+      flex: 1;
+      font-size: .66rem;
+      color: #999;
+      line-height: 1.4;
+      max-width: 200px;
+      font-family: "Inter", sans-serif;
+    }
+
+    .auth__footer-text strong {
+      font-weight: 700;
+      color: #555;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .auth__footer-links {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .auth__footer-link {
+      font-size: .82rem;
+      font-weight: 500;
+      color: #333;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: "Inter", sans-serif;
+    }
+
+    /* ======= SIGNUP SCREEN ======= */
+    .login {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      height: 100%;
+      overflow: hidden
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: max(52px, env(safe-area-inset-top, 52px)) 16px 14px;
+      background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+      flex-shrink: 0;
+    }
+
+    .topbar__t {
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: "Inter", sans-serif
+    }
+
+    .topbar__s {
+      width: 40px
+    }
+
+    .bbtn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #1a1a1a;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .bbtn:active {
+      background: #f0f0f0
+    }
+
+    .login__body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+    }
+
+    .login__heading {
+      margin-bottom: 24px
+    }
+
+    .login__heading h3 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 2px;
+      font-family: "Inter", sans-serif
+    }
+
+    .login__heading p {
+      font-size: .88rem;
+      color: #777;
+      font-family: "Inter", sans-serif
+    }
+
+    .fg {
+      margin-bottom: 18px
+    }
+
+    .fl {
+      display: block;
+      font-size: .82rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif
+    }
+
+    .iw {
+      position: relative;
+      display: flex;
+      align-items: center
+    }
+
+    .iw svg.ic {
+      position: absolute;
+      left: 14px;
+      color: #bbb;
+      pointer-events: none;
+      transition: color .2s
+    }
+
+    .iw:focus-within svg.ic {
+      color: #E8566D
+    }
+
+    .fi {
+      width: 100%;
+      height: 50px;
+      padding: 0 14px 0 44px;
+      background: #f8f8f8;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: .95rem;
+      font-family: "Inter", sans-serif;
+      color: #1a1a1a;
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
+    }
+
+    .fi::placeholder {
+      color: #bbb
+    }
+
+    .fi:focus {
+      outline: none;
+      border-color: #E8566D;
+      box-shadow: 0 0 0 3px rgba(232, 86, 109, .08);
+      background: #fff
+    }
+
+    .fi.err {
+      border-color: #ef4444;
+      background: #fef2f2
+    }
+
+    .fe {
+      font-size: .76rem;
+      color: #ef4444;
+      margin-top: 3px;
+      display: none
+    }
+
+    .fe.show {
+      display: block
+    }
+
+    .lsep {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 2px 0;
+      font-size: .76rem;
+      color: #bbb
+    }
+
+    .lsep::before,
+    .lsep::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #eee
+    }
+
+    .lsr {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px
+    }
+
+    .btn-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 48px;
+      width: 100%;
+      background: #fff;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: .82rem;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-social:active {
+      background: #f5f5f5
+    }
+
+    .lfoot {
+      text-align: center;
+      font-size: .82rem;
+      color: #777;
+      font-family: "Inter", sans-serif
+    }
+
+    .lfoot a {
+      color: #E8566D;
+      font-weight: 600;
+      cursor: pointer
+    }
+
+    /* ======= SUCCESS MODAL ======= */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px
+    }
+
+    .modal-overlay.active {
+      display: flex
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 28px;
+      text-align: center;
+      max-width: 320px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .15);
+      animation: modalIn .35s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(.9) translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0)
+      }
+    }
+
+    .modal-box .check {
+      width: 56px;
+      height: 56px;
+      background: #10b981;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .modal-box h4 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      font-family: "Inter", sans-serif
+    }
+
+    .modal-box p {
+      font-size: .88rem;
+      color: #777;
+      margin-bottom: 20px;
+      font-family: "Inter", sans-serif
+    }
+
+    /* ======= LOADING SPLASH ======= */
+    .splash {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #FAF8F5;
+      gap: 28px;
+      height: 100%
+    }
+
+    .splash__text {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #1a1a1a;
+      letter-spacing: -0.02em;
+      font-family: "Inter", sans-serif
+    }
+
+    .splash__dots {
+      display: flex;
+      gap: 6px
+    }
+
+    .splash__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(26, 26, 26, .15);
+      animation: pls 1.2s ease-in-out infinite
+    }
+
+    .splash__dot:nth-child(2) {
+      animation-delay: .2s
+    }
+
+    .splash__dot:nth-child(3) {
+      animation-delay: .4s
+    }
+
+    @keyframes pls {
+
+      0%,
+      100% {
+        opacity: .3;
+        transform: scale(.8)
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.1)
+      }
+    }
+
+    /* ======= PLANS ======= */
+    .pp {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #FAF8F5;
+      height: 100%;
+      overflow: hidden
+    }
+
+    /* Plans Header - Logo + Hamburger */
+    .plans-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: max(10px, env(safe-area-inset-top, 10px)) 20px 0;
+      background: #FAF8F5;
+      flex-shrink: 0;
+    }
+
+    .plans-header__logo {
+      height: 70px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .plans-header__hamburger {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8e4e0;
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .15s;
+    }
+
+    .plans-header__hamburger:active {
+      background: #ddd8d3
+    }
+
+    .plans-header__hamburger svg {
+      color: #555
+    }
+
+    /* ======= PROFILE SCREEN ======= */
+    .profile-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      background: #FAF8F5;
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+      flex-direction: column;
+      display: none;
+    }
+
+    .profile-screen.visible {
+      display: flex;
+    }
+
+    .profile-screen.open {
+      transform: translateX(0);
+    }
+
+    .profile-scroll {
+      height: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 0;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: max(16px, env(safe-area-inset-top, 16px)) 20px 8px;
+    }
+
+    .profile-back {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8e4e0;
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .15s;
+    }
+
+    .profile-back:active {
+      background: #ddd8d3
+    }
+
+    .profile-settings {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8e4e0;
+      border-radius: 50%;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .15s;
+    }
+
+    .profile-settings:active {
+      background: #ddd8d3
+    }
+
+    .profile-info {
+      text-align: center;
+      padding: 10px 24px 0;
+    }
+
+    .profile-name {
+      font-family: "MinhaFonte", sans-serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      outline: none;
+      border: none;
+      background: transparent;
+      display: inline-block;
+      min-width: 60px;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: background .2s;
+      cursor: text;
+    }
+
+    .profile-name:focus {
+      background: rgba(232, 86, 109, .06);
+    }
+
+    .profile-name:hover {
+      background: rgba(0, 0, 0, .03);
+    }
+
+    .profile-id {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: .82rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+      margin-bottom: 16px;
+    }
+
+    .profile-id__copy {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #888;
+      border-radius: 4px;
+      transition: background .15s, color .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .profile-id__copy:hover {
+      background: rgba(0, 0, 0, .04);
+      color: #555
+    }
+
+    .profile-id__copy:active {
+      background: rgba(0, 0, 0, .08)
+    }
+
+    .profile-plans-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 28px;
+      border: 1.5px solid #1a1a1a;
+      border-radius: 100px;
+      font-size: .88rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      cursor: pointer;
+      background: transparent;
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .profile-plans-btn:hover {
+      background: rgba(0, 0, 0, .03)
+    }
+
+    .profile-plans-btn:active {
+      background: rgba(0, 0, 0, .06)
+    }
+
+    /* ======= CHECKINS SECTION ======= */
+    .checkins-section {
+      padding: 0 20px 12px;
+    }
+
+    .checkin-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, .04);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .checkin-card__left {}
+
+    .checkin-card__num {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #1a1a1a;
+      line-height: 1;
+      font-family: "Inter", sans-serif;
+      letter-spacing: -0.03em;
+    }
+
+    .checkin-card__label {
+      font-size: .82rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+      margin-top: 4px;
+    }
+
+    .checkin-card__pins {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-right: -10px;
+    }
+
+    .checkin-pin {
+      width: 52px;
+      height: 52px;
+      margin-left: -8px;
+      position: relative;
+      filter: drop-shadow(0 2px 4px rgba(232, 86, 109, .3));
+    }
+
+    .checkin-pin:first-child {
+      margin-left: 0
+    }
+
+    .checkin-pin svg {
+      width: 100%;
+      height: 100%
+    }
+
+    /* Habit banner */
+    .habit-banner {
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #64748b 100%);
+      padding: 22px 20px 20px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+    }
+
+    .habit-banner__content {
+      flex: 1
+    }
+
+    .habit-banner__title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.15;
+      font-family: "Inter", sans-serif;
+      margin-bottom: 8px;
+    }
+
+    .habit-banner__text {
+      font-size: .82rem;
+      color: rgba(255, 255, 255, .8);
+      font-family: "Inter", sans-serif;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .habit-banner__drops {
+      display: flex;
+      gap: 4px;
+    }
+
+    .habit-drop {
+      width: 18px;
+      height: 18px;
+      opacity: .5;
+    }
+
+    .habit-banner__fire {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      align-self: center;
+      opacity: .7;
+    }
+
+    .habit-banner__fire svg {
+      width: 100%;
+      height: 100%;
+      color: rgba(255, 255, 255, .5)
+    }
+
+    /* ======= DESAFIOS SECTION ======= */
+    .desafios-wrap {
+      background: #fff;
+      padding: 0 0 max(24px, env(safe-area-inset-bottom, 24px));
+    }
+
+    .desafios-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 20px 16px;
+    }
+
+    .desafios-header h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+    }
+
+    .desafios-header a {
+      font-size: .88rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-family: "Inter", sans-serif;
+      cursor: pointer;
+    }
+
+    /* Featured challenge card */
+    .desafio-featured {
+      margin: 0 20px 16px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(170deg, #5cc6b8 0%, #2a9d8f 40%, #1a7a6d 100%);
+      padding: 18px 20px 20px;
+      position: relative;
+    }
+
+    .desafio-featured__badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-family: "Inter", sans-serif;
+      margin-bottom: 14px;
+    }
+
+    .desafio-featured__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, .25);
+      background: rgba(255, 255, 255, .08);
+    }
+
+    .desafio-featured__icon svg {
+      width: 52px;
+      height: 52px;
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .desafio-featured__by {
+      font-size: .78rem;
+      color: rgba(255, 255, 255, .7);
+      font-family: "Inter", sans-serif;
+      margin-bottom: 2px;
+    }
+
+    .desafio-featured__title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      font-family: "Inter", sans-serif;
+      margin-bottom: 2px;
+    }
+
+    .desafio-featured__bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .desafio-featured__meta {
+      font-size: .76rem;
+      color: rgba(255, 255, 255, .55);
+      font-family: "Inter", sans-serif;
+    }
+
+    .desafio-featured__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 24px;
+      background: #E8566D;
+      color: #fff;
+      font-size: .88rem;
+      font-weight: 700;
+      border-radius: 100px;
+      font-family: "Inter", sans-serif;
+      border: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+
+    .desafio-featured__btn:active {
+      opacity: .8
+    }
+
+    /* Participants counter */
+    .desafios-participants {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 20px 18px;
+      font-size: .82rem;
+      color: #555;
+      font-family: "Inter", sans-serif;
+    }
+
+    .desafios-participants svg {
+      flex-shrink: 0;
+      color: #888
+    }
+
+    .desafios-divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 0 20px;
+    }
+
+    /* Participando section */
+    .desafios-section-title {
+      font-size: .95rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      padding: 22px 20px 14px;
+    }
+
+    .desafio-participando {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 0 20px 8px;
+    }
+
+    .desafio-participando__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2a9d8f, #1a7a6d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .desafio-participando__icon svg {
+      color: #fff;
+      width: 22px;
+      height: 22px
+    }
+
+    .desafio-participando__info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .desafio-participando__name {
+      font-size: .92rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+    }
+
+    .desafio-participando__sub {
+      font-size: .78rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+      margin-top: 1px;
+    }
+
+    .desafio-participando__progress-label {
+      font-size: .76rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+      padding: 6px 20px 4px;
+    }
+
+    .desafio-participando__bar {
+      height: 5px;
+      background: #ececec;
+      border-radius: 3px;
+      margin: 0 20px 20px;
+      overflow: hidden;
+    }
+
+    .desafio-participando__bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2a9d8f, #5cc6b8);
+      border-radius: 3px;
+    }
+
+    /* Descubra section */
+    .desafios-descubra-scroll {
+      display: flex;
+      gap: 12px;
+      padding: 0 20px;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding-bottom: 20px;
+    }
+
+    .desafios-descubra-scroll::-webkit-scrollbar {
+      display: none
+    }
+
+    .desafio-card {
+      flex: 0 0 220px;
+      background: #fff;
+      border: 1px solid #ececec;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .desafio-card__top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .desafio-card__icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #E8566D, #c0355a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .desafio-card__icon svg {
+      color: #fff;
+      width: 20px;
+      height: 20px
+    }
+
+    .desafio-card__badge {
+      display: inline-block;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: .62rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-family: "Inter", sans-serif;
+    }
+
+    .desafio-card__by {
+      font-size: .72rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+    }
+
+    .desafio-card__name {
+      font-size: .82rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      line-height: 1.3;
+    }
+
+    .desafio-card__btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 20px;
+      border: 1.5px solid #E8566D;
+      border-radius: 100px;
+      color: #E8566D;
+      font-size: .8rem;
+      font-weight: 700;
+      font-family: "Inter", sans-serif;
+      background: transparent;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      margin-top: 4px;
+      align-self: flex-start;
+    }
+
+    .desafio-card__btn:active {
+      background: rgba(232, 86, 109, .06)
+    }
+
+    .desafios-criar {
+      text-align: center;
+      padding: 16px 20px 8px;
+    }
+
+    .desafios-criar a {
+      font-size: .9rem;
+      font-weight: 600;
+      color: #E8566D;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-family: "Inter", sans-serif;
+      cursor: pointer;
+    }
+
+    .ptabs {
+      display: flex;
+      padding: 0 10px;
+      background: #fff;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      border-bottom: 1px solid #f0f0f0;
+      flex-shrink: 0;
+    }
+
+    .ptabs::-webkit-scrollbar {
+      display: none
+    }
+
+    .ptab {
+      flex: 0 0 auto;
+      padding: 8px 8px 7px;
+      font-size: .67rem;
+      font-weight: 600;
+      color: #bbb;
+      text-align: center;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+      font-family: "Inter", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .ptab.active {
+      color: #1a1a1a;
+      border-bottom-color: var(--c, #E8566D)
+    }
+
+    .pb {
+      flex: 1;
+      padding: 10px 0 0;
+      overflow: hidden
+    }
+
+    .ptr {
+      display: flex;
+      gap: 14px;
+      padding: 0 24px;
+      transition: transform .4s cubic-bezier(.22, 1, .36, 1);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .pc {
+      flex: 0 0 calc(100vw - 40px);
+      max-width: 394px;
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #ececec;
+      overflow: hidden;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, .04);
+      transition: transform .3s, opacity .3s;
+    }
+
+    @media(min-width:431px) {
+      .pc {
+        flex: 0 0 calc(430px - 40px)
+      }
+    }
+
+    .pc.dim {
+      transform: scale(.92);
+      opacity: .5
+    }
+
+    .pc__bar {
+      height: 5px;
+      width: 100%
+    }
+
+    .pc__badge {
+      display: inline-block;
+      margin: 12px 20px 0;
+      background: #14b8a6;
+      color: #fff;
+      font-size: .6rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      font-family: "Inter", sans-serif;
+    }
+
+    .pc__in {
+      padding: 24px 24px 28px
+    }
+
+    .pc__n {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      font-family: "Inter", sans-serif
+    }
+
+    .pc__pr {
+      display: flex;
+      align-items: baseline;
+      gap: 2px;
+      margin-bottom: 20px
+    }
+
+    .pc__p {
+      font-size: 1.95rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif
+    }
+
+    .pc__m {
+      font-size: .92rem;
+      font-weight: 500;
+      color: #888;
+      font-family: "Inter", sans-serif
+    }
+
+    .pc__hr {
+      height: 1px;
+      background: #f0f0f0;
+      margin-bottom: 18px
+    }
+
+    .pc__fs {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 28px
+    }
+
+    .pc__f {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-size: .9rem;
+      color: #555;
+      font-family: "Inter", sans-serif
+    }
+
+    .pc__f svg {
+      flex-shrink: 0
+    }
+
+    /* Promo card */
+    .pc--promo {
+      position: relative
+    }
+
+    .pc__ribbon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      background: linear-gradient(135deg, #5c1247, #9c1f6b);
+      color: #fff;
+      font-size: .66rem;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      padding: 13px 22px 15px 36px;
+      border-radius: 0 0 0 30px;
+      font-family: "Inter", sans-serif;
+    }
+
+    .pc__in--promo {
+      padding-top: 46px
+    }
+
+    .pc__pr--promo {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px
+    }
+
+    .pc__old {
+      font-size: .92rem;
+      font-weight: 600;
+      color: #b0b0b0;
+      text-decoration: line-through;
+      font-family: "Inter", sans-serif
+    }
+
+    .pc__new-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 3px
+    }
+
+    .pc__new {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif
+    }
+
+    .pc__cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 54px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: .98rem;
+      border: none;
+      background: #E8566D;
+      color: #fff;
+      font-family: "Inter", sans-serif;
+      transition: opacity .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .pc__cta:active {
+      opacity: .8
+    }
+
+    .pdots {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding: 14px 0 4px;
+      flex-shrink: 0
+    }
+
+    .pdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: all .3s
+    }
+
+    .pdot.active {
+      width: 20px;
+      border-radius: 3px;
+      background: #E8566D
+    }
+
+    .pnote {
+      text-align: center;
+      font-size: .76rem;
+      color: #aaa;
+      padding: 6px 24px 0;
+      font-family: "Inter", sans-serif;
+      flex-shrink: 0
+    }
+
+    .paps {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 0 max(20px, env(safe-area-inset-bottom, 20px));
+      flex-shrink: 0;
+    }
+
+    .pap {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+      border: 1px solid #f0f0f0;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: max(20px, env(safe-area-inset-bottom, 20px));
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1a1a1a;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 100px;
+      font-size: .82rem;
+      font-weight: 600;
+      font-family: "Inter", sans-serif;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+      z-index: 999;
+      opacity: 0;
+      transition: transform .4s cubic-bezier(.22, 1, .36, 1), opacity .4s;
+      white-space: nowrap;
+    }
+
+    .toast.visible {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0)
+      }
+
+      25% {
+        transform: translateX(-5px)
+      }
+
+      50% {
+        transform: translateX(5px)
+      }
+
+      75% {
+        transform: translateX(-3px)
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important
+      }
+    }
+
+    /* ===================================
+       ADMIN PANEL
+       =================================== */
+    .admin {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fafafa;
+      height: 100%;
+      overflow: hidden
+    }
+
+    .admin__body {
+      flex: 1;
+      padding: 20px 20px 100px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch
+    }
+
+    .admin__header {
+      padding: 4px 0 20px
+    }
+
+    .admin__title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      font-family: "Inter", sans-serif;
+      color: #1a1a1a;
+      margin-bottom: 10px
+    }
+
+    .admin__subtitle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #666;
+      font-size: .86rem;
+      font-family: "Inter", sans-serif
+    }
+
+    .admin__subtitle svg {
+      flex-shrink: 0;
+      color: #888
+    }
+
+    .admin__empty {
+      text-align: center;
+      color: #999;
+      font-size: .88rem;
+      padding: 40px 20px;
+      font-family: "Inter", sans-serif
+    }
+
+    .ac {
+      background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+      padding: 16px 4px;
+      position: relative
+    }
+
+    .ac:last-child {
+      border-bottom: none
+    }
+
+    .ac__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px
+    }
+
+    .ac__plan {
+      font-size: .78rem;
+      color: #999;
+      font-family: "Inter", sans-serif;
+      margin-bottom: 3px
+    }
+
+    .ac__name {
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: "Inter", sans-serif;
+      color: #1a1a1a
+    }
+
+    .ac__sub {
+      font-size: .82rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+      margin-top: 9px
+    }
+
+    .ac__date {
+      font-size: .82rem;
+      color: #888;
+      font-family: "Inter", sans-serif;
+      margin-top: 1px
+    }
+
+    .ac__notfound {
+      font-size: .82rem;
+      color: #b45309;
+      font-family: "Inter", sans-serif;
+      margin-top: 8px
+    }
+
+    .ac__badge {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-top: 11px;
+      font-family: "Inter", sans-serif
+    }
+
+    .ac__badge.ativa {
+      background: #dcfce7;
+      color: #15803d
+    }
+
+    .ac__badge.inativa {
+      background: #fee2e2;
+      color: #b91c1c
+    }
+
+    .ac__badge.pendente {
+      background: #fef3c7;
+      color: #92400e
+    }
+
+    .ac__menu-wrap {
+      position: relative;
+      flex-shrink: 0
+    }
+
+    .ac__ic-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      color: #777;
+      transition: background .15s, color .15s;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    .ac__ic-btn:active {
+      background: #f0f0f0
+    }
+
+    .ac__menu {
+      position: absolute;
+      top: 38px;
+      right: 0;
+      background: #fff;
+      border: 1px solid #ececec;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+      min-width: 150px;
+      padding: 6px;
+      display: none;
+      z-index: 5
+    }
+
+    .ac__menu.open {
+      display: block
+    }
+
+    .ac__menu button {
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: .85rem;
+      font-family: "Inter", sans-serif;
+      color: #333;
+      text-align: left;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    .ac__menu button:active {
+      background: #f5f5f5
+    }
+
+    .ac__menu button.danger {
+      color: #ef4444
+    }
+
+    .admin__fab {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 14px 20px max(14px, env(safe-area-inset-bottom, 14px));
+      background: linear-gradient(180deg, rgba(250, 250, 250, 0), #fafafa 35%)
+    }
+
+    .modal-box--form {
+      max-width: 380px;
+      width: 100%;
+      text-align: left;
+      max-height: 85vh;
+      overflow-y: auto
+    }
+
+    .modal-box--form h4 {
+      margin-bottom: 18px;
+      font-size: 1.1rem
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px
+    }
+
+    .modal-actions .btn-white,
+    .modal-actions .btn-pink {
+      flex: 1
+    }
+
+    /* ===================================
+       CHECKOUT (resumo do plano, sem pagamento/gateway)
+       =================================== */
+    .chk {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #fafafa;
+      height: 100%;
+      overflow: hidden
+    }
+
+    .chk__body {
+      flex: 1;
+      padding: 20px 24px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch
+    }
+
+    .chk__card {
+      background: #fff;
+      border: 1px solid #ececec;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 16px
+    }
+
+    .chk__row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0
+    }
+
+    .chk__label {
+      font-size: .9rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif
+    }
+
+    .chk__sub {
+      font-size: .78rem;
+      color: #999;
+      margin-top: 2px;
+      font-family: "Inter", sans-serif
+    }
+
+    .chk__val {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+      white-space: nowrap
+    }
+
+    .chk__foot {
+      padding: 14px 24px max(14px, env(safe-area-inset-bottom, 14px));
+      border-top: 1px solid #f0f0f0;
+      flex-shrink: 0
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="app">
+
+    <!-- ===== WELCOME ===== -->
+    <div class="screen active" id="s-welcome">
+      <div class="welcome">
+        <div class="welcome__top">
+          <img src="imagens/logo-white-nova.png" alt="WellHub" class="welcome__logo">
+        </div>
+        <div class="welcome__body">
+          <h1 class="welcome__title">Tu bienestar<br>te está<br>esperando</h1>
+        </div>
+        <div class="welcome__bottom">
+          <button class="btn-pink" onclick="transitionTo('s-email')">Regístrate gratis</button>
+          <div class="welcome__or"><span>o</span></div>
+          <button class="btn-white" onclick="transitionTo('s-email')">Iniciar sesión</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 1: EMAIL ===== -->
+    <div class="screen" id="s-email">
+      <div class="auth">
+        <button class="auth__close" onclick="transitionTo('s-welcome')" aria-label="Cerrar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+        <div class="auth__header">
+          <img src="imagens/logo-pink-nova.png" alt="WellHub" class="auth__logo">
+        </div>
+        <div class="auth__content">
+          <h2 class="auth__title">Ingresa tu correo electrónico</h2>
+          <p class="auth__subtitle">Es el mismo que usas en WellHub.</p>
+          <form id="emailForm" onsubmit="return handleEmailStep(event)">
+            <div class="float-group">
+              <input type="email" id="step-email" class="float-input" autocomplete="email" required>
+              <label for="step-email" class="float-label">Correo electrónico</label>
+              <div class="float-error" id="email-err"></div>
+            </div>
+            <button type="submit" class="btn-pink" id="btn-continue">Continuar</button>
+          </form>
+          <a class="auth__signup-link" onclick="transitionTo('s-signup')">Regístrate gratis</a>
+        </div>
+        <div class="auth__footer">
+          <div class="auth__footer-text">Este sitio está protegido por reCAPTCHA Enterprise y la <strong>Política de
+              privacidad de WellHub</strong> y los <strong>Términos de servicio</strong> aplican.</div>
+          <div class="auth__footer-links">
+            <span class="auth__footer-link">Términos</span>
+            <span class="auth__footer-link">Privacidad</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 2: PASSWORD ===== -->
+    <div class="screen" id="s-password">
+      <div class="auth">
+        <button class="auth__close" onclick="editEmail()" aria-label="Cerrar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+        <div class="auth__header">
+          <img src="imagens/logo-pink-nova.png" alt="WellHub" class="auth__logo">
+        </div>
+        <div class="auth__content">
+          <h2 class="auth__title">Ingresa tu contraseña</h2>
+          <div class="auth__email-display">
+            <span class="auth__email-text" id="display-email"></span>
+            <button class="auth__edit-btn" onclick="editEmail()" aria-label="Editar correo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                <path d="m15 5 4 4" />
+              </svg>
+            </button>
+          </div>
+          <form id="passwordForm" onsubmit="return handlePasswordStep(event)">
+            <div class="float-group pwd-wrap">
+              <input type="password" id="step-password" class="float-input" autocomplete="current-password" required>
+              <label for="step-password" class="float-label">Contraseña</label>
+              <button type="button" class="pwd-toggle" onclick="togglePassword()" aria-label="Mostrar contraseña">
+                <svg id="pwd-eye-show" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg id="pwd-eye-hide" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5" style="display:none">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-10-7-10-7a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                  <line x1="2" y1="2" x2="22" y2="22" />
+                </svg>
+              </button>
+              <div class="float-error" id="pwd-err"></div>
+            </div>
+            <a class="auth__forgot">¿Olvidaste tu contraseña?</a>
+            <div style="height:20px"></div>
+            <button type="submit" class="btn-pink" id="btn-login" disabled>
+              <span id="btn-login-text">Iniciar sesión</span>
+              <div id="btn-login-spinner" style="display:none">
+                <div class="spinner"></div>
+              </div>
+            </button>
+          </form>
+        </div>
+        <div class="auth__footer">
+          <div class="auth__footer-text">Este sitio está protegido por reCAPTCHA Enterprise y la <strong>Política de
+              privacidad de WellHub</strong> y los <strong>Términos de servicio</strong> aplican.</div>
+          <div class="auth__footer-links">
+            <span class="auth__footer-link">Términos</span>
+            <span class="auth__footer-link">Privacidad</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SIGNUP ===== -->
+    <div class="screen" id="s-signup">
+      <div class="login">
+        <div class="topbar">
+          <button class="bbtn" onclick="transitionTo('s-email')" aria-label="Volver"><svg width="24" height="24"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg></button>
+          <span class="topbar__t">Crear cuenta</span>
+          <div class="topbar__s"></div>
+        </div>
+        <div class="login__body">
+          <div class="login__heading">
+            <h3>Crea tu cuenta 🚀</h3>
+            <p>Completa tus datos para comenzar.</p>
+          </div>
+          <form id="signupForm" onsubmit="return handleSignup(event)">
+            <div class="fg">
+              <label class="fl" for="su-email">Correo electrónico</label>
+              <div class="iw">
+                <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+                <input type="email" id="su-email" class="fi" placeholder="tu@correo.com" autocomplete="email">
+              </div>
+              <div class="fe" id="su-ee"></div>
+            </div>
+            <div class="fg">
+              <label class="fl" for="su-password">Contraseña</label>
+              <div class="iw">
+                <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+                <input type="password" id="su-password" class="fi" placeholder="Mínimo 6 caracteres"
+                  autocomplete="new-password">
+              </div>
+              <div class="fe" id="su-ep"></div>
+            </div>
+            <div style="height:14px"></div>
+            <button type="submit" class="btn-pink" id="su-btn">
+              <span id="su-blt">Crear cuenta</span>
+              <div id="su-bls" style="display:none">
+                <div class="spinner"></div>
+              </div>
+            </button>
+          </form>
+          <div class="lsep"><span>o continúa con</span></div>
+          <div class="lsr">
+            <button class="btn-social"><svg width="18" height="18" viewBox="0 0 24 24">
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                  fill="#4285F4" />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#34A853" />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  fill="#FBBC05" />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  fill="#EA4335" />
+              </svg>Google</button>
+            <button class="btn-social"><svg width="16" height="18" viewBox="0 0 24 24" fill="#1a1a1a">
+                <path
+                  d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+              </svg>Apple</button>
+          </div>
+          <p class="lfoot">¿Ya tienes una cuenta? <a onclick="transitionTo('s-email')">Iniciar sesión</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LOADING ===== -->
+    <div class="screen" id="s-loading">
+      <div class="splash">
+        <span class="splash__text"></span>
+        <div class="splash__dots">
+          <div class="splash__dot"></div>
+          <div class="splash__dot"></div>
+          <div class="splash__dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PLANS ===== -->
+    <div class="screen" id="s-plans">
+      <div class="pp">
+        <div class="plans-header">
+          <img src="imagens/logo-pink-nova.png" alt="WellHub" class="plans-header__logo">
+          <button class="plans-header__hamburger" onclick="openProfile()" aria-label="Menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+
+        <div class="ptabs" id="planTabs">
+          <button class="ptab" style="--c:#E8566D" onclick="gp(0)">Starter</button>
+          <button class="ptab" style="--c:#E8566D" onclick="gp(1)">Basic</button>
+          <button class="ptab" style="--c:#14b8a6" onclick="gp(2)">Basic+</button>
+          <button class="ptab" style="--c:#94a3b8" onclick="gp(3)">Silver</button>
+          <button class="ptab" style="--c:#14b8a6" onclick="gp(4)">Silver+</button>
+          <button class="ptab" style="--c:#f59e0b" onclick="gp(5)">Gold</button>
+          <button class="ptab" style="--c:#f59e0b" onclick="gp(6)">Gold+</button>
+          <button class="ptab" style="--c:#6b7280" onclick="gp(7)">Platinum</button>
+          <button class="ptab" style="--c:#6366f1" onclick="gp(8)">Diamond</button>
+          <button class="ptab" style="--c:#8b5cf6" onclick="gp(9)">Diamond+</button>
+        </div>
+
+        <div class="pb">
+          <div class="ptr" id="trk">
+
+            <div class="pc dim" data-i="0">
+              <div class="pc__bar" style="background:linear-gradient(90deg,#E8566D,#f472b6)"></div>
+              <div class="pc__in">
+                <div class="pc__n">Starter</div>
+                <div class="pc__pr"><span class="pc__p">$99.90</span><span class="pc__m">/mes</span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8566D"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>3,030+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8566D"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc dim" data-i="1">
+              <div class="pc__bar" style="background:linear-gradient(90deg,#E8566D,#f472b6)"></div>
+              <div class="pc__in">
+                <div class="pc__n">Basic</div>
+                <div class="pc__pr"><span class="pc__p">$154.90</span><span class="pc__m">/mes</span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8566D"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>10,980+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8566D"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8566D"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>2x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc pc--promo dim" data-i="2">
+              <div class="pc__ribbon">Ahorra 50%</div>
+              <div class="pc__bar" style="background:linear-gradient(90deg,#671850,#671850)"></div>
+              <div class="pc__in pc__in--promo">
+                <div class="pc__n">Basic+</div>
+                <div class="pc__pr pc__pr--promo"><span class="pc__old">$319.90</span><span class="pc__new-wrap"><span
+                      class="pc__new">$159.90</span><span class="pc__m">/mes</span></span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>17,590+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14b8a6"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>2x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc pc--promo dim" data-i="3">
+              <div class="pc__ribbon">Ahorra 50%</div>
+              <div class="pc__bar" style="background:linear-gradient(90deg,#671850,#671850)"></div>
+              <div class="pc__in pc__in--promo">
+                <div class="pc__n">Silver</div>
+                <div class="pc__pr pc__pr--promo"><span class="pc__old">$569.90</span><span class="pc__new-wrap"><span
+                      class="pc__new">$284.90</span><span class="pc__m">/mes</span></span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>24,960+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>4x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc pc--promo dim" data-i="4">
+              <div class="pc__ribbon">Ahorra 50%</div>
+              <div class="pc__bar" style="background:linear-gradient(90deg,#671850,#671850)"></div>
+              <div class="pc__in pc__in--promo">
+                <div class="pc__n">Silver+</div>
+                <div class="pc__pr pc__pr--promo"><span class="pc__old">$749.90</span><span class="pc__new-wrap"><span
+                      class="pc__new">$374.90</span><span class="pc__m">/mes</span></span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>28,980+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>4x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc pc--promo dim" data-i="5">
+              <div class="pc__ribbon">Ahorra 50%</div>
+              <div class="pc__bar" style="background:linear-gradient(90deg,#671850,#671850)"></div>
+              <div class="pc__in pc__in--promo">
+                <div class="pc__n">Gold</div>
+                <div class="pc__pr pc__pr--promo"><span class="pc__old">$999.90</span><span class="pc__new-wrap"><span
+                      class="pc__new">$499.90</span><span class="pc__m">/mes</span></span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>33,770+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>4x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc dim" data-i="6">
+              <div class="pc__bar" style="background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div>
+              <div class="pc__in">
+                <div class="pc__n">Gold+</div>
+                <div class="pc__pr"><span class="pc__p">$1,399.90</span><span class="pc__m">/mes</span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>36,080+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>8x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc dim" data-i="7">
+              <div class="pc__bar" style="background:linear-gradient(90deg,#6b7280,#9ca3af)"></div>
+              <div class="pc__in">
+                <div class="pc__n">Platinum</div>
+                <div class="pc__pr"><span class="pc__p">$1,699.90</span><span class="pc__m">/mes</span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>36,840+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>8x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc dim" data-i="8">
+              <div class="pc__bar" style="background:linear-gradient(90deg,#6366f1,#818cf8)"></div>
+              <div class="pc__in">
+                <div class="pc__n">Diamond</div>
+                <div class="pc__pr"><span class="pc__p">$2,399.90</span><span class="pc__m">/mes</span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>37,150+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>8x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+            <div class="pc dim" data-i="9">
+              <div class="pc__bar" style="background:linear-gradient(90deg,#8b5cf6,#a78bfa)"></div>
+              <div class="pc__in">
+                <div class="pc__n">Diamond+</div>
+                <div class="pc__pr"><span class="pc__p">$3,499.90</span><span class="pc__m">/mes</span></div>
+                <div class="pc__hr"></div>
+                <div class="pc__fs">
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6"
+                      stroke-width="1.5">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg><span>37,180+ gimnasios y estudios</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6"
+                      stroke-width="1.5">
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg><span>1x/día acceso estándar</span></div>
+                  <div class="pc__f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6"
+                      stroke-width="1.5">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                      <circle cx="9" cy="7" r="4" />
+                    </svg><span>8x/mes sesiones privadas</span></div>
+                </div><button class="pc__cta" onclick="goCheckout(this)">Elegir Plan</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="pdots" id="pd"><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span
+            class="pdot"></span><span class="pdot active"></span><span class="pdot"></span><span
+            class="pdot"></span><span class="pdot"></span><span class="pdot"></span><span class="pdot"></span></div>
+        <p class="pnote">Apps de bienestar incluidas gratis en todos los planes.</p>
+        <div class="paps"><span class="pap">🧘</span><span class="pap">🧠</span><span class="pap">🥗</span><span
+            class="pap">😴</span><span class="pap">💪</span></div>
+      </div>
+    </div>
+
+
+    <!-- ===== ADMIN PANEL ===== -->
+    <div class="screen" id="s-admin">
+      <div class="admin">
+        <div class="topbar" style="background:#fff">
+          <button class="bbtn" onclick="adminLogout()" aria-label="Salir"><svg width="24" height="24"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg></button>
+          <span class="topbar__t">Miembros de la familia</span>
+          <div class="topbar__s"></div>
+        </div>
+        <div class="admin__body">
+          <div class="admin__header">
+            <h2 class="admin__title">Miembros de la familia</h2>
+            <div class="admin__subtitle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+              </svg>
+              <span id="adminSubtitleText">0 lugares disponibles</span>
+            </div>
+          </div>
+          <div id="adminList"></div>
+        </div>
+      </div>
+      <div class="admin__fab">
+        <button class="btn-pink" id="addSubBtn" onclick="openPersonModal()">Agregar nueva suscripción</button>
+      </div>
+    </div>
+
+    <!-- ===== CHECKOUT (resumo do plano) ===== -->
+    <div class="screen" id="s-checkout">
+      <div class="chk">
+        <div class="topbar">
+          <button class="bbtn" onclick="transitionTo('s-plans')" aria-label="Volver"><svg width="24" height="24"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg></button>
+          <span class="topbar__t" id="chk-plan-name">Plan</span>
+          <div class="topbar__s"></div>
+        </div>
+        <div class="chk__body">
+          <div class="chk__card">
+            <div class="chk__row">
+              <div>
+                <div class="chk__label">Valor de la suscripción</div>
+                <div class="chk__sub">Cobro mensual recurrente</div>
+              </div>
+              <div class="chk__val" id="chk-plan-price">$0.00</div>
+            </div>
+          </div>
+          <div class="chk__card">
+            <div class="chk__label" style="margin-bottom:6px">Lo que incluye</div>
+            <div class="pc__fs" id="chk-features" style="margin-bottom:0"></div>
+          </div>
+        </div>
+        <div class="chk__foot">
+          <button type="button" class="btn-pink" id="chk-pay-btn" onclick="continuarPagamento()">Continuar al
+            pago</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROFILE PANEL (slides over plans) ===== -->
+    <div class="profile-screen" id="profilePanel">
+      <div class="profile-scroll">
+        <div class="profile-header">
+          <button class="profile-back" onclick="closeProfile()" aria-label="Voltar">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </button>
+          <button class="profile-settings" aria-label="Configurações">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="profile-info">
+          <span class="profile-name" id="profileName" contenteditable="true" spellcheck="false">Usuário</span>
+          <div class="profile-id">
+            <span>WellHub ID: <span id="profileUserId">000 000 000 0000</span></span>
+            <button class="profile-id__copy" onclick="copyUserId()" aria-label="Copiar ID">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" />
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+              </svg>
+            </button>
+          </div>
+          <button class="profile-plans-btn" onclick="closeProfile()">Ver os planos</button>
+        </div>
+
+        <!-- Check-ins section -->
+        <div class="checkins-section">
+          <!-- Check-in count card -->
+          <div class="checkin-card">
+            <div class="checkin-card__left">
+              <div class="checkin-card__num">0</div>
+              <div class="checkin-card__label">Faça seu primeiro check-in</div>
+            </div>
+            <div class="checkin-card__pins">
+              <div class="checkin-pin">
+                <svg viewBox="0 0 40 52" fill="none">
+                  <defs>
+                    <linearGradient id="pin1b" x1="0" y1="0" x2="40" y2="52" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#f472b6" />
+                      <stop offset="50%" stop-color="#E8566D" />
+                      <stop offset="100%" stop-color="#be185d" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M20 0C9 0 0 9 0 20c0 14 20 32 20 32s20-18 20-32C40 9 31 0 20 0z" fill="url(#pin1b)" />
+                  <circle cx="20" cy="19" r="7" fill="#1a1a1a" opacity=".25" />
+                  <circle cx="20" cy="19" r="5" fill="#fff" opacity=".15" />
+                  <circle cx="12" cy="10" r="2" fill="#fff" opacity=".5" />
+                  <circle cx="8" cy="16" r="1" fill="#fff" opacity=".3" />
+                </svg>
+              </div>
+              <div class="checkin-pin">
+                <svg viewBox="0 0 40 52" fill="none">
+                  <path d="M20 0C9 0 0 9 0 20c0 14 20 32 20 32s20-18 20-32C40 9 31 0 20 0z" fill="url(#pin1b)" />
+                  <circle cx="20" cy="19" r="7" fill="#1a1a1a" opacity=".25" />
+                  <circle cx="20" cy="19" r="5" fill="#fff" opacity=".15" />
+                  <circle cx="28" cy="8" r="2" fill="#fff" opacity=".6" />
+                  <circle cx="14" cy="12" r="1.5" fill="#fff" opacity=".4" />
+                </svg>
+              </div>
+              <div class="checkin-pin">
+                <svg viewBox="0 0 40 52" fill="none">
+                  <path d="M20 0C9 0 0 9 0 20c0 14 20 32 20 32s20-18 20-32C40 9 31 0 20 0z" fill="url(#pin1b)" />
+                  <circle cx="20" cy="19" r="7" fill="#1a1a1a" opacity=".25" />
+                  <circle cx="20" cy="19" r="5" fill="#fff" opacity=".15" />
+                  <circle cx="10" cy="8" r="1.5" fill="#fff" opacity=".5" />
+                  <circle cx="30" cy="14" r="2" fill="#fff" opacity=".35" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Habit banner -->
+          <div class="habit-banner">
+            <div class="habit-banner__content">
+              <div class="habit-banner__title">Torne o bem-estar<br>um hábito</div>
+              <div class="habit-banner__text">Faça 1 check-in semanal por 2 semanas seguidas! 🔥</div>
+              <div class="habit-banner__drops">
+                <svg class="habit-drop" viewBox="0 0 24 24" fill="#64748b">
+                  <path d="M12 2C8 7 4 11 4 15a8 8 0 0 0 16 0c0-4-4-8-8-13z" />
+                </svg>
+                <svg class="habit-drop" viewBox="0 0 24 24" fill="#64748b">
+                  <path d="M12 2C8 7 4 11 4 15a8 8 0 0 0 16 0c0-4-4-8-8-13z" />
+                </svg>
+              </div>
+            </div>
+            <div class="habit-banner__fire">
+              <svg viewBox="0 0 64 64" fill="none">
+                <defs>
+                  <linearGradient id="fireG2" x1="16" y1="8" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#cbd5e1" />
+                    <stop offset="50%" stop-color="#94a3b8" />
+                    <stop offset="100%" stop-color="#64748b" />
+                  </linearGradient>
+                </defs>
+                <path d="M32 4c-4 8-16 16-16 28a16 16 0 0 0 32 0C48 20 36 12 32 4z" stroke="url(#fireG2)"
+                  stroke-width="3" fill="none" />
+                <path d="M32 20c-2 4-8 8-8 16a8 8 0 0 0 16 0c0-8-6-12-8-16z" stroke="url(#fireG2)" stroke-width="2.5"
+                  fill="none" />
+                <path d="M32 32c-1 2-4 4-4 8a4 4 0 0 0 8 0c0-4-3-6-4-8z" fill="url(#fireG2)" opacity=".4" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desafios section -->
+        <div class="desafios-wrap">
+          <div class="desafios-header">
+            <h3>Desafios</h3>
+            <a>Ver tudo</a>
+          </div>
+
+          <!-- Featured challenge card -->
+          <div class="desafio-featured">
+            <span class="desafio-featured__badge">Novidade</span>
+            <div class="desafio-featured__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10" />
+                <path d="M12 2c3 3 4.5 6.5 4.5 10s-1.5 7-4.5 10" />
+                <path d="M12 2c-3 3-4.5 6.5-4.5 10s1.5 7 4.5 10" />
+                <path d="M8 4c1.5 2.5 2 5.5 2 8s-.5 5.5-2 8" />
+                <path d="M16 4c-1.5 2.5-2 5.5-2 8s.5 5.5 2 8" />
+              </svg>
+            </div>
+            <div class="desafio-featured__by">Por WellHub</div>
+            <div class="desafio-featured__bottom">
+              <div>
+                <div class="desafio-featured__title">Julho: Reta Final (4 de 4)</div>
+                <div class="desafio-featured__meta">Meta: 55.000 pontos por participante</div>
+              </div>
+              <button class="desafio-featured__btn">Participar</button>
+            </div>
+          </div>
+
+          <!-- Participants -->
+          <div class="desafios-participants">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span>57.291 participantes já estão confirmados!</span>
+          </div>
+
+          <div class="desafios-divider"></div>
+
+          <!-- Participando -->
+          <div class="desafios-section-title">Participando</div>
+          <div class="desafio-participando">
+            <div class="desafio-participando__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </div>
+            <div class="desafio-participando__info">
+              <div class="desafio-participando__name">Julho: 150k Pontos</div>
+              <div class="desafio-participando__sub">Por WellHub • Termina em 3 dias</div>
+            </div>
+          </div>
+          <div class="desafio-participando__progress-label">0 de 150.000 pontos</div>
+          <div class="desafio-participando__bar">
+            <div class="desafio-participando__bar-fill"></div>
+          </div>
+
+          <div class="desafios-divider"></div>
+
+          <!-- Descubra -->
+          <div class="desafios-section-title">Descubra o seu próximo desafio</div>
+          <div class="desafios-descubra-scroll">
+            <div class="desafio-card">
+              <div class="desafio-card__top">
+                <div class="desafio-card__icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                  </svg>
+                </div>
+                <div>
+                  <span class="desafio-card__badge">Novidade</span>
+                  <div class="desafio-card__by">Por WellHub</div>
+                </div>
+              </div>
+              <div class="desafio-card__name">Agosto: 70k Pontos em 7 Dias</div>
+              <button class="desafio-card__btn">Participar</button>
+            </div>
+            <div class="desafio-card">
+              <div class="desafio-card__top">
+                <div class="desafio-card__icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                  </svg>
+                </div>
+                <div>
+                  <span class="desafio-card__badge">Novidade</span>
+                  <div class="desafio-card__by">Por WellHub</div>
+                </div>
+              </div>
+              <div class="desafio-card__name">Agosto: 150k Pontos em 15 Dias</div>
+              <button class="desafio-card__btn">Participar</button>
+            </div>
+          </div>
+
+          <!-- Criar um desafio -->
+          <div class="desafios-criar">
+            <a>Criar um desafio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Add/Edit Person Modal -->
+  <div class="modal-overlay" id="personModal">
+    <div class="modal-box modal-box--form">
+      <h4 id="personModalTitle">Adicionar assinatura</h4>
+      <form id="personForm" onsubmit="return savePerson(event)">
+        <input type="hidden" id="p-id">
+        <div class="fg">
+          <label class="fl" for="p-name">Nome</label>
+          <div class="iw">
+            <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+            </svg>
+            <input type="text" id="p-name" class="fi" placeholder="Nome completo" required>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="p-plan">Plano</label>
+          <div class="iw">
+            <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <select id="p-plan" class="fi">
+              <option>Starter</option>
+              <option>Basic</option>
+              <option>Basic+</option>
+              <option>Silver</option>
+              <option>Silver+</option>
+              <option>Gold</option>
+              <option>Gold+</option>
+              <option>Platinum</option>
+              <option>Diamond</option>
+              <option>Diamond+</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="p-status">Status</label>
+          <div class="iw">
+            <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <path d="M9 12l2 2 4-4" />
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+            <select id="p-status" class="fi">
+              <option value="ativa">Ativa</option>
+              <option value="pendente">Pendente</option>
+              <option value="inativa">Inativa</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl" for="p-date">Renova em</label>
+          <div class="iw">
+            <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <rect width="18" height="18" x="3" y="4" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            <input type="date" id="p-date" class="fi">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-white" onclick="closePersonModal()">Cancelar</button>
+          <button type="submit" class="btn-pink">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-box">
+      <div class="check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12" />
+        </svg></div>
+      <h4>Conta criada com sucesso! 🎉</h4>
+      <p>Agora faça login para acessar seus planos.</p>
+      <button class="btn-pink" onclick="closeModalAndLogin()">Ir para o login</button>
+    </div>
+  </div>
+
+  <script>
+    // ========== APP STATE ==========
+    var appState = { email: '' };
+
+    // ========== ADMIN ACCESS ==========
+    var ADMIN_EMAIL = 'adr@gmail.com';
+    var ADMIN_PASS = '12345';
+
+    // ========== SCREEN TRANSITIONS ==========
+    function transitionTo(id) {
+      var current = document.querySelector('.screen.active');
+      if (current) {
+        current.style.opacity = '0';
+        setTimeout(function () {
+          current.classList.remove('active');
+          current.style.opacity = '';
+          var next = document.getElementById(id);
+          next.style.opacity = '0';
+          next.classList.add('active');
+          // Force reflow
+          void next.offsetWidth;
+          next.style.opacity = '1';
+          if (id === 's-plans') setTimeout(function () { gp(cp, false) }, 50);
+          if (id === 's-password') document.getElementById('step-password').focus();
+        }, 200);
+      } else {
+        var next = document.getElementById(id);
+        next.classList.add('active');
+        next.style.opacity = '1';
+      }
+    }
+
+    // ========== STEP 1: EMAIL ==========
+    var emailInput = document.getElementById('step-email');
+
+    // Floating label logic
+    emailInput.addEventListener('input', function () {
+      this.classList.toggle('filled', this.value.length > 0);
+      this.classList.remove('has-error');
+      document.getElementById('email-err').className = 'float-error';
+    });
+    emailInput.addEventListener('blur', function () {
+      this.classList.toggle('filled', this.value.length > 0);
+    });
+
+    function handleEmailStep(e) {
+      e.preventDefault();
+      var val = emailInput.value.trim();
+      var err = document.getElementById('email-err');
+
+      if (!val) {
+        emailInput.classList.add('has-error');
+        err.textContent = 'Digite seu e-mail';
+        err.className = 'float-error show';
+        emailInput.style.animation = 'shake .4s';
+        setTimeout(function () { emailInput.style.animation = '' }, 400);
+        return false;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+        emailInput.classList.add('has-error');
+        err.textContent = 'E-mail inválido';
+        err.className = 'float-error show';
+        emailInput.style.animation = 'shake .4s';
+        setTimeout(function () { emailInput.style.animation = '' }, 400);
+        return false;
+      }
+
+      // Store email and transition to password step
+      appState.email = val;
+      document.getElementById('display-email').textContent = val;
+      transitionTo('s-password');
+      return false;
+    }
+
+    // ========== STEP 2: PASSWORD ==========
+    var pwdInput = document.getElementById('step-password');
+    var btnLogin = document.getElementById('btn-login');
+
+    pwdInput.addEventListener('input', function () {
+      this.classList.toggle('filled', this.value.length > 0);
+      this.classList.remove('has-error');
+      document.getElementById('pwd-err').className = 'float-error';
+      // Enable/disable button
+      var isAdminEmail = appState.email.trim().toLowerCase() === ADMIN_EMAIL;
+      btnLogin.disabled = this.value.length < (isAdminEmail ? 1 : 6);
+    });
+    pwdInput.addEventListener('blur', function () {
+      this.classList.toggle('filled', this.value.length > 0);
+    });
+
+    function togglePassword() {
+      var h = pwdInput.type === 'password';
+      pwdInput.type = h ? 'text' : 'password';
+      document.getElementById('pwd-eye-show').style.display = h ? 'none' : 'block';
+      document.getElementById('pwd-eye-hide').style.display = h ? 'block' : 'none';
+    }
+
+    function editEmail() {
+      emailInput.value = appState.email;
+      emailInput.classList.add('filled');
+      transitionTo('s-email');
+      setTimeout(function () { emailInput.focus() }, 300);
+    }
+
+    function handlePasswordStep(e) {
+      e.preventDefault();
+      var val = pwdInput.value;
+      var err = document.getElementById('pwd-err');
+      var isAdmin = appState.email.trim().toLowerCase() === ADMIN_EMAIL && val === ADMIN_PASS;
+
+      if (!isAdmin && val.length < 6) {
+        pwdInput.classList.add('has-error');
+        err.textContent = 'Mínimo 6 caracteres';
+        err.className = 'float-error show';
+        pwdInput.style.animation = 'shake .4s';
+        setTimeout(function () { pwdInput.style.animation = '' }, 400);
+        return false;
+      }
+
+      // Show loading then go to plans (or admin panel)
+      btnLogin.disabled = true;
+      document.getElementById('btn-login-text').style.display = 'none';
+      document.getElementById('btn-login-spinner').style.display = 'flex';
+
+      setTimeout(function () {
+        btnLogin.disabled = false;
+        document.getElementById('btn-login-text').style.display = '';
+        document.getElementById('btn-login-spinner').style.display = 'none';
+        pwdInput.value = '';
+        pwdInput.classList.remove('filled');
+        btnLogin.disabled = true;
+        // Set profile name to user email on login
+        if (appState.email) {
+          document.getElementById('profileName').textContent = appState.email;
+        }
+        if (isAdmin) {
+          renderAdminList();
+          transitionTo('s-admin');
+        } else {
+          transitionTo('s-loading');
+          setTimeout(function () { transitionTo('s-plans') }, 2000);
+        }
+      }, 800);
+      return false;
+    }
+
+    // ========== SIGNUP ==========
+    function handleSignup(e) {
+      e.preventDefault();
+      var em = document.getElementById('su-email'), pw = document.getElementById('su-password');
+      var e1 = document.getElementById('su-ee'), e2 = document.getElementById('su-ep');
+      var ok = true;
+      em.classList.remove('err'); e1.className = 'fe'; e1.textContent = '';
+      pw.classList.remove('err'); e2.className = 'fe'; e2.textContent = '';
+
+      if (!em.value.trim()) { em.classList.add('err'); e1.textContent = 'Digite seu e-mail'; e1.className = 'fe show'; ok = false; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) { em.classList.add('err'); e1.textContent = 'E-mail inválido'; e1.className = 'fe show'; ok = false; }
+      if (!pw.value) { pw.classList.add('err'); e2.textContent = 'Digite sua senha'; e2.className = 'fe show'; ok = false; }
+      else if (pw.value.length < 6) { pw.classList.add('err'); e2.textContent = 'Mínimo 6 caracteres'; e2.className = 'fe show'; ok = false; }
+      if (!ok) return false;
+
+      var b = document.getElementById('su-btn'); b.disabled = true;
+      document.getElementById('su-blt').style.display = 'none';
+      document.getElementById('su-bls').style.display = 'flex';
+      var savedEmail = em.value;
+
+      setTimeout(function () {
+        b.disabled = false;
+        document.getElementById('su-blt').style.display = '';
+        document.getElementById('su-bls').style.display = 'none';
+        appState.email = savedEmail;
+        emailInput.value = savedEmail;
+        emailInput.classList.add('filled');
+        document.getElementById('successModal').classList.add('active');
+      }, 1000);
+      return false;
+    }
+
+    document.getElementById('su-email').addEventListener('input', function () { this.classList.remove('err'); document.getElementById('su-ee').className = 'fe' });
+    document.getElementById('su-password').addEventListener('input', function () { this.classList.remove('err'); document.getElementById('su-ep').className = 'fe' });
+
+    function closeModalAndLogin() {
+      document.getElementById('successModal').classList.remove('active');
+      transitionTo('s-email');
+    }
+
+    // ========== PLANS CAROUSEL ==========
+    var cp = 4, trk = document.getElementById('trk'), cds = document.querySelectorAll('.pc'), tbs = document.querySelectorAll('.ptab'), dts = document.querySelectorAll('.pdot'), N = cds.length;
+    function gp(i, a) {
+      if (a === undefined) a = true; cp = Math.max(0, Math.min(i, N - 1));
+      var cw = cds[0].offsetWidth + 14, pw = trk.parentElement.offsetWidth, pad = 24;
+      var off = cp * cw - (pw - cds[0].offsetWidth) / 2 + pad;
+      trk.style.transition = a ? 'transform .4s cubic-bezier(.22,1,.36,1)' : 'none';
+      trk.style.transform = 'translateX(' + (-off) + 'px)';
+      cds.forEach(function (c, j) { c.classList.toggle('dim', j !== cp) });
+      tbs.forEach(function (t, j) { t.classList.toggle('active', j === cp) });
+      dts.forEach(function (d, j) { d.classList.toggle('active', j === cp) });
+      tbs[cp].scrollIntoView({ behavior: a ? 'smooth' : 'auto', block: 'nearest', inline: 'center' });
+    }
+    var sx = 0, mx = 0, dr = false, so = 0;
+    trk.addEventListener('touchstart', function (e) { dr = true; sx = e.touches[0].clientX; mx = sx; so = new DOMMatrix(getComputedStyle(trk).transform).m41; trk.style.transition = 'none' }, { passive: true });
+    trk.addEventListener('touchmove', function (e) { if (!dr) return; mx = e.touches[0].clientX; trk.style.transform = 'translateX(' + (so + (mx - sx)) + 'px)' }, { passive: true });
+    trk.addEventListener('touchend', function () { if (!dr) return; dr = false; var d = mx - sx; if (d < -35 && cp < N - 1) gp(cp + 1); else if (d > 35 && cp > 0) gp(cp - 1); else gp(cp); mx = 0 });
+    trk.addEventListener('mousedown', function (e) { dr = true; sx = e.clientX; mx = sx; so = new DOMMatrix(getComputedStyle(trk).transform).m41; trk.style.transition = 'none'; trk.style.cursor = 'grabbing'; e.preventDefault() });
+    window.addEventListener('mousemove', function (e) { if (!dr) return; mx = e.clientX; trk.style.transform = 'translateX(' + (so + (mx - sx)) + 'px)' });
+    window.addEventListener('mouseup', function () { if (!dr) return; dr = false; trk.style.cursor = ''; var d = mx - sx; if (d < -35 && cp < N - 1) gp(cp + 1); else if (d > 35 && cp > 0) gp(cp - 1); else gp(cp); mx = 0 });
+    document.addEventListener('keydown', function (e) { if (!document.getElementById('s-plans').classList.contains('active')) return; if (e.key === 'ArrowLeft') gp(cp - 1); if (e.key === 'ArrowRight') gp(cp + 1) });
+    window.addEventListener('resize', function () { gp(cp, false) });
+    function selPlan(n) { var x = document.querySelector('.toast'); if (x) x.remove(); var t = document.createElement('div'); t.className = 'toast'; t.textContent = n + ' plan selected! ✨'; document.body.appendChild(t); requestAnimationFrame(function () { requestAnimationFrame(function () { t.classList.add('visible') }) }); setTimeout(function () { t.classList.remove('visible'); setTimeout(function () { t.remove() }, 500) }, 2500) }
+    gp(4, false);
+
+    // ========== ADMIN PANEL (CRUD + localStorage) ==========
+    var ADMIN_STORAGE_KEY = 'WellHub_admin_people';
+    var MAX_ASSINATURAS = 3;
+
+    function loadPeople() {
+      try {
+        var raw = localStorage.getItem(ADMIN_STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) { }
+      var seed = [
+        { id: 1, name: 'Membro Exemplo 1', plan: 'Basic+', status: 'ativa', date: '2026-08-15' },
+        { id: 2, name: 'Membro Exemplo 2', plan: 'Basic', status: 'pendente', date: '' }
+      ];
+      savePeople(seed);
+      return seed;
+    }
+
+    function savePeople(list) {
+      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(list));
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    var MONTHS_PT = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+    function fmtDate(iso) {
+      if (!iso) return 'Sem data definida';
+      var p = iso.split('-');
+      return Number(p[2]) + ' de ' + MONTHS_PT[Number(p[1]) - 1] + ' de ' + p[0];
+    }
+
+    function memberMenuHtml(p) {
+      return '<div class="ac__menu-wrap">' +
+        '<button class="ac__ic-btn" aria-label="Opções" onclick="toggleMemberMenu(event,' + p.id + ')"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button>' +
+        '<div class="ac__menu" id="menu-' + p.id + '">' +
+        '<button onclick="closeMemberMenus();openPersonModal(' + p.id + ')">Editar</button>' +
+        '<button class="danger" onclick="closeMemberMenus();deletePerson(' + p.id + ')">Excluir</button>' +
+        '</div>' +
+        '</div>';
+    }
+
+    function countActiveSubscriptions(people) {
+      return people.filter(function (p) { return p.status === 'ativa'; }).length;
+    }
+
+    function renderAdminList() {
+      var people = loadPeople();
+      var box = document.getElementById('adminList');
+      var used = countActiveSubscriptions(people);
+      var available = Math.max(0, MAX_ASSINATURAS - used);
+      document.getElementById('adminSubtitleText').textContent = available + (available === 1 ? ' assinatura disponível' : ' assinaturas disponíveis');
+
+      var addBtn = document.getElementById('addSubBtn');
+      addBtn.disabled = available <= 0;
+      addBtn.textContent = available <= 0 ? 'Limite de 3 assinaturas atingido' : 'Adicionar nova assinatura';
+
+      if (!people.length) {
+        box.innerHTML = '<div class="admin__empty">Nenhum registro ainda. Toque em "Adicionar nova assinatura" para começar.</div>';
+        return;
+      }
+      box.innerHTML = people.map(function (p) {
+        if (p.status === 'pendente') {
+          return '<div class="ac">' +
+            '<div class="ac__top">' +
+            '<div class="ac__name">' + escapeHtml(p.name) + '</div>' +
+            memberMenuHtml(p) +
+            '</div>' +
+            '<div class="ac__notfound">Assinatura não encontrada. Adicione uma assinatura.</div>' +
+            '</div>';
+        }
+        var badgeClass = p.status === 'ativa' ? 'ativa' : 'inativa';
+        var badgeText = p.status === 'ativa' ? 'Ativa' : 'Inativa';
+        var dateLabel = p.status === 'ativa' ? 'Renova em ' : 'Expirou em ';
+        return '<div class="ac">' +
+          '<div class="ac__top">' +
+          '<div><div class="ac__plan">' + escapeHtml(p.plan) + '</div><div class="ac__name">' + escapeHtml(p.name) + '</div></div>' +
+          memberMenuHtml(p) +
+          '</div>' +
+          '<div class="ac__sub">Assinatura mensal</div>' +
+          '<div class="ac__date">' + dateLabel + fmtDate(p.date) + '</div>' +
+          '<span class="ac__badge ' + badgeClass + '">' + badgeText + '</span>' +
+          '</div>';
+      }).join('');
+    }
+
+    function toggleMemberMenu(e, id) {
+      e.stopPropagation();
+      var menu = document.getElementById('menu-' + id);
+      var wasOpen = menu.classList.contains('open');
+      closeMemberMenus();
+      if (!wasOpen) menu.classList.add('open');
+    }
+
+    function closeMemberMenus() {
+      document.querySelectorAll('.ac__menu.open').forEach(function (m) { m.classList.remove('open'); });
+    }
+
+    document.addEventListener('click', closeMemberMenus);
+
+    function openPersonModal(id) {
+      var form = document.getElementById('personForm');
+      form.reset();
+      document.getElementById('p-id').value = '';
+      document.getElementById('personModalTitle').textContent = 'Adicionar assinatura';
+      if (id !== undefined) {
+        var people = loadPeople();
+        var p = people.find(function (x) { return x.id === id; });
+        if (p) {
+          document.getElementById('personModalTitle').textContent = 'Editar assinatura';
+          document.getElementById('p-id').value = p.id;
+          document.getElementById('p-name').value = p.name;
+          document.getElementById('p-plan').value = p.plan;
+          document.getElementById('p-status').value = p.status;
+          document.getElementById('p-date').value = p.date || '';
+        }
+      }
+      document.getElementById('personModal').classList.add('active');
+    }
+
+    function closePersonModal() {
+      document.getElementById('personModal').classList.remove('active');
+    }
+
+    function savePerson(e) {
+      e.preventDefault();
+      var id = document.getElementById('p-id').value;
+      var name = document.getElementById('p-name').value.trim();
+      var plan = document.getElementById('p-plan').value;
+      var status = document.getElementById('p-status').value;
+      var date = document.getElementById('p-date').value;
+      if (!name) return false;
+
+      var people = loadPeople();
+      var used = countActiveSubscriptions(people);
+
+      if (id) {
+        var idx = people.findIndex(function (x) { return x.id === Number(id); });
+        if (idx > -1) {
+          var wasActive = people[idx].status === 'ativa';
+          var usedWithoutThis = used - (wasActive ? 1 : 0);
+          if (status === 'ativa' && usedWithoutThis >= MAX_ASSINATURAS) {
+            alert('Limite de 3 assinaturas ativas atingido.');
+            return false;
+          }
+          people[idx] = { id: Number(id), name: name, plan: plan, status: status, date: date };
+        }
+      } else {
+        if (status === 'ativa' && used >= MAX_ASSINATURAS) {
+          closePersonModal();
+          renderAdminList();
+          return false;
+        }
+        var newId = people.length ? Math.max.apply(null, people.map(function (x) { return x.id })) + 1 : 1;
+        people.push({ id: newId, name: name, plan: plan, status: status, date: date });
+      }
+      savePeople(people);
+      renderAdminList();
+      closePersonModal();
+      return false;
+    }
+
+    function deletePerson(id) {
+      if (!confirm('Remover este registro?')) return;
+      var people = loadPeople().filter(function (x) { return x.id !== id; });
+      savePeople(people);
+      renderAdminList();
+    }
+
+    function adminLogout() {
+      appState.email = '';
+      transitionTo('s-welcome');
+    }
+
+    // ========== CHECKOUT (resumo do plano + link de pagamento) ==========
+    var CHECKOUT_LINKS = {
+      'Starter': 'https://checkout.vizzionpay.com.br/checkout/cmsufnkbb063v01pzytqbdmlm?offer=m45olqq',
+      'Basic': 'https://checkout.vizzionpay.com.br/checkout/cmsufmh4f062901pz4czm8if7?offer=x6hfdli',
+      'Basic+': 'https://checkout.vizzionpay.com.br/checkout/cmsufllr2061l01pz5kqkuwum?offer=s05vbhj',
+      'Silver': 'https://checkout.vizzionpay.com.br/checkout/cmsufkgx7060r01pzpbh6rsdo?offer=7fqupp8',
+      'Silver+': 'https://checkout.vizzionpay.com.br/checkout/cmsufj4a305zo01pzsiueeye3?offer=6QO4GJP',
+      'Gold': 'https://checkout.vizzionpay.com.br/checkout/cmsufcaxz05sp01pzn9vw4s4s?offer=FT0A6DI'
+    };
+    var currentCheckoutLink = null;
+
+    function goCheckout(btn) {
+      var card = btn.closest('.pc');
+      var name = card.querySelector('.pc__n').textContent;
+      var priceEl = card.querySelector('.pc__new') || card.querySelector('.pc__p');
+      var price = priceEl.textContent;
+      var featuresHtml = card.querySelector('.pc__fs').innerHTML;
+
+      currentCheckoutLink = CHECKOUT_LINKS[name] || null;
+      document.getElementById('chk-plan-name').textContent = name;
+      document.getElementById('chk-plan-price').textContent = price + '/mês';
+      document.getElementById('chk-features').innerHTML = featuresHtml;
+      transitionTo('s-checkout');
+    }
+
+    function continuarPagamento() {
+      if (currentCheckoutLink) {
+        window.location.href = currentCheckoutLink;
+      }
+    }
+
+    // ========== PROFILE PANEL ==========
+    function generateUserId() {
+      var id = '';
+      for (var i = 0; i < 13; i++) {
+        id += Math.floor(Math.random() * 10);
+      }
+      return id.replace(/(\d{3})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4');
+    }
+
+    var userProfileId = generateUserId();
+    document.getElementById('profileUserId').textContent = userProfileId;
+
+    function openProfile() {
+      // Set user name to email if not yet set
+      var nameEl = document.getElementById('profileName');
+      if (nameEl.textContent === 'Usuário' && appState.email) {
+        nameEl.textContent = appState.email;
+      }
+      var panel = document.getElementById('profilePanel');
+      panel.classList.add('visible');
+      // Force reflow then animate
+      void panel.offsetWidth;
+      panel.classList.add('open');
+    }
+
+    function closeProfile() {
+      var panel = document.getElementById('profilePanel');
+      panel.classList.remove('open');
+      // Wait for slide-out animation to finish, then hide completely
+      setTimeout(function () {
+        if (!panel.classList.contains('open')) {
+          panel.classList.remove('visible');
+        }
+      }, 350);
+    }
+
+    function copyUserId() {
+      var id = document.getElementById('profileUserId').textContent;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(id.replace(/\s/g, '')).then(function () {
+          showToast('ID copiado! ✓');
+        });
+      } else {
+        showToast('ID: ' + id);
+      }
+    }
+
+    function showToast(msg) {
+      var x = document.querySelector('.toast');
+      if (x) x.remove();
+      var t = document.createElement('div');
+      t.className = 'toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { t.classList.add('visible') });
+      });
+      setTimeout(function () {
+        t.classList.remove('visible');
+        setTimeout(function () { t.remove() }, 500);
+      }, 2500);
+    }
+
+    // Prevent line breaks in contenteditable name
+    document.getElementById('profileName').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        this.blur();
+      }
+    });
+
+  </script>
+</body>
+
+</html>
